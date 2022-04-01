@@ -11,4 +11,3 @@ class News(db.Model):
 
     def __repr__(self):
         return '<News {} {}>'.format(self.title, self.url)
-
