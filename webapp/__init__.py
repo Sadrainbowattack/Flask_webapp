@@ -3,8 +3,10 @@ from flask_login import LoginManager
 from webapp.news.models import db, News
 from webapp.news.weather import weather_by_city
 from webapp.user.models import User
+from webapp.news.views import blueprint as index_blueprint
 from webapp.user.views import blueprint as user_blueprint
 from webapp.admin.admin_page import blueprint as admin_blueprint
+
 
 
 def create_app():
@@ -14,6 +16,7 @@ def create_app():
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'user.login'
+    app.register_blueprint(index_blueprint)
     app.register_blueprint(user_blueprint)
     app.register_blueprint(admin_blueprint)
 
@@ -21,12 +24,5 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(user_id)
-
-    @app.route('/')
-    def index():
-        title = 'Какой-то сайт'
-        weather = weather_by_city(app.config['WEATHER_DEFAULT_CITY'])
-        news_list = News.query.order_by(News.published.desc()).all()
-        return render_template('index.html', page_title=title, weather=weather, news_list=news_list)
 
     return app
