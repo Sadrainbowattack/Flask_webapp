@@ -2,7 +2,8 @@ from getpass import getpass
 import sys
 
 from webapp import create_app
-from webapp.user.models import db, User
+from webapp import db
+from webapp.user.models import User
 
 def choose_role():
     while True:
@@ -23,6 +24,8 @@ with app.app_context():
     if User.query.filter(User.username == username).count():
         print('This username already exists')
         sys.exit(0)
+    
+    email = input('Enter e-mail')
 
     password1 = getpass('Enter password:')
     password2 = getpass('Confirm password:')
@@ -34,11 +37,11 @@ with app.app_context():
     role = choose_role()
 
     if role.lower() == 'admin':
-        new_user = User(username=username, role='admin')
+        new_user = User(username=username, email=email, role='admin')
         new_user.set_password(password1)
     
     elif role.lower() == 'user':
-        new_user = User(username=username, role='user')
+        new_user = User(username=username, email=email, role='user')
         new_user.set_password(password1)
 
     db.session.add(new_user)

@@ -1,5 +1,6 @@
 from flask import Blueprint, current_app, render_template, current_app
-from webapp.news.models import db, News
+
+from webapp.news.models import News
 from webapp.news.weather import weather_by_city
 
 blueprint = Blueprint('index', __name__, url_prefix='/')
