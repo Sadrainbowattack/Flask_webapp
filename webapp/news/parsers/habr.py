@@ -30,9 +30,9 @@ def get_habr_content():
         if html:
             soup = BeautifulSoup(html, 'html.parser')
             try:
-                article = soup.find('div', class_='article-formatted-body article-formatted-body_version-2').decode_contents()
+                article = soup.find('div', class_='article-formatted-body article-formatted-body article-formatted-body_version-2').decode_contents()
             except AttributeError:
-                article = soup.find('div', class_='article-formatted-body article-formatted-body_version-1').decode_contents()
+                article = soup.find('div', class_='article-formatted-body article-formatted-body article-formatted-body_version-1').decode_contents()
                 
             if article:
                 news.text = article
