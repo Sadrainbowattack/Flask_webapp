@@ -3,8 +3,36 @@
   {% block content %}
       <div class="row">
           <div class="col-8 news-content">
+              {% include('messages.html') %}
               {{ news.text|safe }}
-          </div>
+              {% if news.comments %}
+                <h3>Comments:</h3>
+                {% for comment in news.comments %}
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">{{ comment.text }}</p>
+                        <p class="card-text">
+                            <small>Published: {{ comment.created.strftime('%d.%m.%Y') }} | 
+                                Author: {{ comment.user.username }}</small>
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+              {% endif %}
+            {% if current_user.is_authenticated %}
+                <form action="{{ url_for('index.add_comment') }}" method="POST">
+                    {{ comment_form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ comment_form.comment_text.label }}
+                        {{ comment_form.comment_text() }}
+                    </div>
+                    {{ comment_form.submit() }}
+                </form>
+            {% else %}  
+            <p>
+                <a href="{{ url_for('user.login', next=request.full_path) }}">Log in</a> for commenting
+            </p>
+            {% endif %}
           <div class="col-4">
           </div>
       </div>
